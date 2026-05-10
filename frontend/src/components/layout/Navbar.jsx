@@ -49,6 +49,7 @@ const Navbar = () => {
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsDark(true);
     }
   }, []);
