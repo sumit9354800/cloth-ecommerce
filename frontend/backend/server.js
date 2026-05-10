@@ -29,6 +29,12 @@ app.get('/', (req, res) => {
 
 // Routes (Baad mein add karenge)
 // app.use('/api/auth', authRoutes);
+
+// Import routes
+const authRoutes = require('./routes/authRoutes');
+// Routes
+app.use('/api/auth', authRoutes);
+
 // app.use('/api/products', productRoutes);
 
 // Port define karo
