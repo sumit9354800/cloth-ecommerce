@@ -12,6 +12,7 @@ import ProductCard from '@/components/products/ProductCard';
 import API from '@/utils/axiosConfig';
 import toast from 'react-hot-toast';
 import Loading from '@/components/common/Loading';
+import Link from 'next/link';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -103,11 +104,11 @@ export default function ProductDetailPage() {
         {/* Breadcrumb */}
         <nav className="mb-6">
           <ol className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <li><a href="/" className="hover:text-primary">Home</a></li>
+            <li><Link href="/" className="hover:text-primary">Home</Link></li>
             <li><span>/</span></li>
-            <li><a href="/products" className="hover:text-primary">Products</a></li>
+            <li><Link href="/products" className="hover:text-primary">Products</Link></li>
             <li><span>/</span></li>
-            <li><a href={`/products?category=${product.category}`} className="hover:text-primary">{product.category}</a></li>
+            <li><Link href={`/products?category=${product.category}`} className="hover:text-primary">{product.category}</Link></li>
             <li><span>/</span></li>
             <li className="text-primary">{product.name}</li>
           </ol>

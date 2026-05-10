@@ -13,18 +13,18 @@ const Footer = () => {
               Your one-stop destination for premium fashion. Quality clothing for every occasion.
             </p>
             <div className="flex space-x-4 mt-4">
-              <a href="#" className="hover:text-primary transition-colors">
+              <Link href="#" className="hover:text-primary transition-colors">
                 <FiFacebook />
-              </a>
-              <a href="#" className="hover:text-primary transition-colors">
+              </Link>
+              <Link href="#" className="hover:text-primary transition-colors">
                 <FiTwitter />
-              </a>
-              <a href="#" className="hover:text-primary transition-colors">
+              </Link>
+              <Link href="#" className="hover:text-primary transition-colors">
                 <FiInstagram />
-              </a>
-              <a href="#" className="hover:text-primary transition-colors">
+              </Link>
+              <Link href="#" className="hover:text-primary transition-colors">
                 <FiYoutube />
-              </a>
+              </Link>
             </div>
           </div>
 

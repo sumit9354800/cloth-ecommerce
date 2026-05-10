@@ -98,10 +98,10 @@ const Navbar = () => {
                 Categories
               </button>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                <Link href="/products?category=Men" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg">Men</Link>
-                <Link href="/products?category=Women" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Women</Link>
-                <Link href="/products?category=Kids" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Kids</Link>
-                <Link href="/products?category=Accessories" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg">Accessories</Link>
+                <Link href="/products?category=Men" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-t-lg">Men</Link>
+                <Link href="/products?category=Women" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700">Women</Link>
+                <Link href="/products?category=Kids" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700">Kids</Link>
+                <Link href="/products?category=Accessories" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-b-lg">Accessories</Link>
               </div>
             </div>
           </div>

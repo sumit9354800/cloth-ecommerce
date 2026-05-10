@@ -38,9 +38,13 @@ app.use('/api/auth', authRoutes);
 // app.use('/api/products', productRoutes);
 // Import routes ke section mein ye line add karo
 const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
 
 // Routes section mein ye line add karo
 app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 // Port define karo
 const PORT = process.env.PORT || 5000;
 

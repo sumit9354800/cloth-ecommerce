@@ -18,6 +18,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
+       <meta
+  name="format-detection"
+  content="telephone=no, date=no, email=no, address=no"
+/>
         <ReduxProvider>
           <div className="flex flex-col min-h-screen bg-light dark:bg-dark">
             <Navbar />
