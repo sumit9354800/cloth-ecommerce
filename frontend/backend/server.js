@@ -3,6 +3,8 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+// const paymentRoutes = require('./routes/paymentRoutes');
+// const orderRoutes = require('./routes/orderRoutes');
 
 // Environment variables load karo
 dotenv.config();
@@ -45,6 +47,8 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+// app.use('/api/payment', paymentRoutes);
+// app.use('/api/orders', orderRoutes);
 // Port define karo
 const PORT = process.env.PORT || 5000;
 

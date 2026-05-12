@@ -3,7 +3,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation'; // ✅ Added useRouter
 import { useDispatch } from 'react-redux';
 import { FiShoppingCart, FiHeart, FiShare2, FiMinus, FiPlus, FiStar, FiTruck } from 'react-icons/fi';
 import { addToCart } from '@/redux/slices/cartSlice';
@@ -16,6 +16,7 @@ import Link from 'next/link';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const router = useRouter(); // ✅ Added router
   const dispatch = useDispatch();
   
   const [product, setProduct] = useState(null);
@@ -75,7 +76,7 @@ export default function ProductDetailPage() {
 
   const handleBuyNow = () => {
     handleAddToCart();
-    router.push('/checkout');
+    router.push('/checkout'); // ✅ Now router is defined
   };
 
   if (loading) return <Loading />;

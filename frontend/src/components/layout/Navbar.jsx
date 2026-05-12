@@ -1,21 +1,30 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useSelector, useDispatch } from 'react-redux';
-import { FiShoppingCart, FiHeart, FiUser, FiSearch, FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
-import { logout } from '@/redux/slices/authSlice';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  FiShoppingCart,
+  FiHeart,
+  FiUser,
+  FiSearch,
+  FiMenu,
+  FiX,
+  FiSun,
+  FiMoon,
+} from "react-icons/fi";
+import { logout } from "@/redux/slices/authSlice";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
-  
+
   const dispatch = useDispatch();
   const router = useRouter();
-  
+
   // Redux se data lo
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -30,25 +39,25 @@ const Navbar = () => {
         setIsScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Dark mode toggle
   useEffect(() => {
     if (isDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   }, [isDark]);
 
   // Load saved theme
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsDark(true);
     }
@@ -59,38 +68,45 @@ const Navbar = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/products?search=${searchQuery}`);
-      setSearchQuery('');
+      setSearchQuery("");
     }
   };
 
   // Logout handler
   const handleLogout = () => {
     dispatch(logout());
-    router.push('/');
+    router.push("/");
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-white/95 dark:bg-dark/95 backdrop-blur-md shadow-lg' 
-        : 'bg-white dark:bg-dark'
-    }`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/95 dark:bg-dark/95 backdrop-blur-md shadow-lg"
+          : "bg-white dark:bg-dark"
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="text-2xl font-bold text-primary">
               FashionStore
             </span>
           </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
+            <Link
+              href="/"
+              className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+            >
               Home
             </Link>
-            <Link href="/products" className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors">
+            <Link
+              href="/products"
+              className="text-gray-700 dark:text-gray-200 hover:text-primary transition-colors"
+            >
               Products
             </Link>
             <div className="relative group">
@@ -98,10 +114,30 @@ const Navbar = () => {
                 Categories
               </button>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                <Link href="/products?category=Men" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-t-lg">Men</Link>
-                <Link href="/products?category=Women" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700">Women</Link>
-                <Link href="/products?category=Kids" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700">Kids</Link>
-                <Link href="/products?category=Accessories" className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-b-lg">Accessories</Link>
+                <Link
+                  href="/products?category=Men"
+                  className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-t-lg"
+                >
+                  Men
+                </Link>
+                <Link
+                  href="/products?category=Women"
+                  className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700"
+                >
+                  Women
+                </Link>
+                <Link
+                  href="/products?category=Kids"
+                  className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700"
+                >
+                  Kids
+                </Link>
+                <Link
+                  href="/products?category=Accessories"
+                  className="block px-4 py-2 hover:bg-gray-100 text-white dark:hover:bg-gray-700 rounded-b-lg"
+                >
+                  Accessories
+                </Link>
               </div>
             </div>
           </div>
@@ -136,7 +172,10 @@ const Navbar = () => {
             </button>
 
             {/* Wishlist */}
-            <Link href="/wishlist" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+            <Link
+              href="/wishlist"
+              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            >
               <FiHeart className="text-xl text-gray-600 dark:text-gray-200" />
               {wishlist?.length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -146,7 +185,10 @@ const Navbar = () => {
             </Link>
 
             {/* Cart */}
-            <Link href="/cart" className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
+            <Link
+              href="/cart"
+              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            >
               <FiShoppingCart className="text-xl text-gray-600 dark:text-gray-200" />
               {cart?.totalQuantity > 0 && (
                 <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -172,15 +214,24 @@ const Navbar = () => {
                       {user?.email}
                     </p>
                   </div>
-                  {user?.role === 'admin' && (
-                    <Link href="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  {user?.role === "admin" && (
+                    <Link
+                      href="/admin/dashboard"
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
                       Admin Dashboard
                     </Link>
                   )}
-                  <Link href="/orders" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <Link
+                    href="/orders"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
                     My Orders
                   </Link>
-                  <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
                     Profile
                   </Link>
                   <button
@@ -231,20 +282,35 @@ const Navbar = () => {
               </div>
             </form>
             <div className="space-y-2">
-              <Link href="/" className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <Link
+                href="/"
+                className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              >
                 Home
               </Link>
-              <Link href="/products" className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <Link
+                href="/products"
+                className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              >
                 All Products
               </Link>
-              <Link href="/products?category=Men" className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <Link
+                href="/products?category=Men"
+                className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              >
                 Men
               </Link>
-              <Link href="/products?category=Women" className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <Link
+                href="/products?category=Women"
+                className="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              >
                 Women
               </Link>
               {!isAuthenticated && (
-                <Link href="/auth/login" className="block py-2 px-4 bg-primary text-white rounded-lg text-center">
+                <Link
+                  href="/auth/login"
+                  className="block py-2 px-4 bg-primary text-white rounded-lg text-center"
+                >
                   Login / Signup
                 </Link>
               )}

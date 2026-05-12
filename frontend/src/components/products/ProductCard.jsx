@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { FiHeart, FiShoppingCart, FiEye } from 'react-icons/fi';
 import { addToCart } from '@/redux/slices/cartSlice';
