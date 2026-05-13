@@ -1,21 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getAllOrders,
+  createOrder,
   getMyOrders,
-  getOrderDetails,
-  updateOrderStatus,
+  getOrderById,
   cancelOrder,
+  trackOrder,
+  getAllOrders,
+  updateOrderStatus,
+  getOrderStats,
 } = require('../controllers/orderController');
 const { authMiddleware, adminMiddleware } = require('../middleware/authMiddleware');
 
-// User routes
-router.get('/my-orders', authMiddleware, getMyOrders);
-router.get('/:id', authMiddleware, getOrderDetails);
-router.put('/:id/cancel', authMiddleware, cancelOrder);
+// Public route (no login required)
+router.get('/track/:orderId', trackOrder);
+
+// User routes (login required)
+router.use(authMiddleware);
+router.post('/', createOrder);
+router.get('/my-orders', getMyOrders);
+router.get('/:id', getOrderById);
+router.put('/:id/cancel', cancelOrder);
 
 // Admin routes
-router.get('/admin/all', authMiddleware, adminMiddleware, getAllOrders);
-router.put('/:id/status', authMiddleware, adminMiddleware, updateOrderStatus);
+router.get('/admin/all', adminMiddleware, getAllOrders);
+router.get('/admin/stats', adminMiddleware, getOrderStats);
+router.put('/admin/:id', adminMiddleware, updateOrderStatus);
 
 module.exports = router;

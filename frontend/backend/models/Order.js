@@ -13,29 +13,34 @@ const orderSchema = new mongoose.Schema({
         ref: 'Product',
         required: true,
       },
-      name: String,
+      name: {
+        type: String,
+        required: true,
+      },
       quantity: {
         type: Number,
         required: true,
+        min: [1, 'Quantity kam se kam 1 honi chahiye'],
       },
       price: {
         type: Number,
         required: true,
       },
-      image: String,
       size: String,
       color: String,
+      image: String,
     },
   ],
-  
   shippingAddress: {
     fullName: {
       type: String,
       required: [true, 'Full name likhna zaroori hai'],
+      trim: true,
     },
     phone: {
       type: String,
       required: [true, 'Phone number likhna zaroori hai'],
+      match: [/^[6-9]\d{9}$/, 'Sahi phone number likho'],
     },
     address: {
       type: String,
@@ -52,31 +57,20 @@ const orderSchema = new mongoose.Schema({
     pincode: {
       type: String,
       required: [true, 'Pincode likhna zaroori hai'],
+      match: [/^\d{6}$/, 'Sahi pincode likho (6 digits)'],
     },
     landmark: String,
   },
-
   paymentInfo: {
-    razorpayOrderId: {
+    id: String,              // Razorpay payment ID
+    status: String,          // Payment status
+    method: {
       type: String,
-      required: true,
+      enum: ['COD', 'ONLINE'],
+      default: 'COD',
     },
-    razorpayPaymentId: {
-      type: String,
-      default: null,
-    },
-    razorpaySignature: {
-      type: String,
-      default: null,
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'completed', 'failed', 'refunded'],
-      default: 'pending',
-    },
-    method: String,
+    paidAt: Date,
   },
-
   itemsPrice: {
     type: Number,
     required: true,
@@ -97,29 +91,61 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-
   orderStatus: {
     type: String,
-    enum: ['Processing', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'],
-    default: 'Processing',
+    enum: ['Pending', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+    default: 'Pending',
   },
-
   deliveredAt: Date,
   cancelledAt: Date,
-
+  cancellationReason: String,
+  orderNotes: String,
   trackingNumber: String,
-  courierName: String,
-
-  notes: String,
-  
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  orderId: {
+    type: String,
+    unique: true,
   },
+}, {
+  timestamps: true,
 });
 
-// Index for faster queries
+// Order ID generate karne ka pre-save hook
+orderSchema.pre('save', async function(next) {
+  if (!this.orderId) {
+    // Format: ORD-20240101-XXXXX
+    const date = new Date();
+    const dateStr = date.getFullYear() +
+      String(date.getMonth() + 1).padStart(2, '0') +
+      String(date.getDate()).padStart(2, '0');
+    
+    const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
+    this.orderId = `ORD-${dateStr}-${randomStr}`;
+  }
+  next();
+});
+
+// Auto-calculate prices before save
+orderSchema.pre('save', function(next) {
+  // Calculate items total
+  this.itemsPrice = this.orderItems.reduce(
+    (total, item) => total + (item.price * item.quantity), 0
+  );
+  
+  // Calculate tax (5% GST)
+  this.taxPrice = Math.round(this.itemsPrice * 0.05);
+  
+  // Free shipping above 999
+  this.shippingPrice = this.itemsPrice >= 999 ? 0 : 99;
+  
+  // Calculate total
+  this.totalPrice = this.itemsPrice + this.taxPrice + this.shippingPrice;
+  
+  next();
+});
+
+// Indexes for faster queries
 orderSchema.index({ user: 1, createdAt: -1 });
-orderSchema.index({ 'paymentInfo.razorpayOrderId': 1 });
+orderSchema.index({ orderId: 1 });
+orderSchema.index({ orderStatus: 1 });
 
 module.exports = mongoose.model('Order', orderSchema);

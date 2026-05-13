@@ -42,11 +42,16 @@ app.use('/api/auth', authRoutes);
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
+// Import routes section mein ye line add karo
+const orderRoutes = require('./routes/orderRoutes');
 
 // Routes section mein ye line add karo
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+// Routes section mein ye line add karo
+app.use('/api/orders', orderRoutes);
+
 // app.use('/api/payment', paymentRoutes);
 // app.use('/api/orders', orderRoutes);
 // Port define karo
