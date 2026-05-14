@@ -103,7 +103,7 @@ const orderSchema = new mongoose.Schema({
   trackingNumber: String,
   orderId: {
     type: String,
-    unique: true,
+    // unique: true,
   },
 }, {
   timestamps: true,
