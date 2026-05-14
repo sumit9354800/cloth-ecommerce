@@ -17,6 +17,7 @@ import {
 import API from '@/utils/axiosConfig';
 import toast from 'react-hot-toast';
 
+
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
     totalOrders: 0,
@@ -189,7 +190,7 @@ export default function AdminDashboardPage() {
             Recent Orders
           </h2>
           <Link
-            href="/admin/dashboard/orders"
+            href="/admin/orders"
             className="text-sm text-primary hover:underline"
           >
             View All
@@ -216,7 +217,7 @@ export default function AdminDashboardPage() {
                 >
                   <td className="px-6 py-4">
                     <Link
-                      href={`/admin/dashboard/orders/${order._id}`}
+                      href={`/admin/orders/${order._id}`}
                       className="font-mono text-sm text-primary hover:underline"
                     >
                       {order.orderId}

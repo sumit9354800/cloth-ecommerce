@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { FiPlus, FiSearch, FiEdit2, FiTrash2, FiEye } from 'react-icons/fi';
 import API from '@/utils/axiosConfig';
 import toast from 'react-hot-toast';
-import ProductForm from '@/components/admin/ProductForm';
+import ProductForm from '../ProductForm';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);

@@ -1,3 +1,4 @@
+// backend/controllers/cartController.js
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 
@@ -17,7 +18,7 @@ const getCart = async (req, res) => {
         user: req.user._id,
         items: [],
         totalPrice: 0,
-        totalItems: 0,
+        totalItems: 0,  // ✅ Added
       });
     }
 
@@ -26,6 +27,7 @@ const getCart = async (req, res) => {
       cart,
     });
   } catch (error) {
+    console.error('Get cart error:', error);  // ✅ Added logging
     res.status(500).json({
       success: false,
       message: 'Cart fetch nahi ho paaya',
@@ -61,8 +63,8 @@ const addToCart = async (req, res) => {
     let cart = await Cart.findOne({ user: req.user._id });
 
     if (!cart) {
-      // Naya cart banao
-      cart = await Cart.create({
+      // Naya cart banao with proper structure
+      cart = new Cart({
         user: req.user._id,
         items: [{
           product: productId,
@@ -71,7 +73,10 @@ const addToCart = async (req, res) => {
           color,
           price: product.price,
         }],
+        totalPrice: product.price * quantity,
+        totalItems: quantity,
       });
+      await cart.save();
     } else {
       // Check if product already in cart
       const existingItemIndex = cart.items.findIndex(
@@ -82,15 +87,17 @@ const addToCart = async (req, res) => {
 
       if (existingItemIndex > -1) {
         // Product already cart mein hai, quantity update karo
-        cart.items[existingItemIndex].quantity += quantity;
+        const newQuantity = cart.items[existingItemIndex].quantity + quantity;
         
         // Stock se zyada toh nahi
-        if (cart.items[existingItemIndex].quantity > product.stock) {
+        if (newQuantity > product.stock) {
           return res.status(400).json({
             success: false,
             message: `You can only add up to ${product.stock} items of this product`,
           });
         }
+        
+        cart.items[existingItemIndex].quantity = newQuantity;
       } else {
         // Naya product add karo
         cart.items.push({
@@ -102,6 +109,10 @@ const addToCart = async (req, res) => {
         });
       }
 
+      // Update totals manually (or use pre-save hook)
+      cart.totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
+      cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      
       await cart.save();
     }
 
@@ -117,6 +128,7 @@ const addToCart = async (req, res) => {
       message: 'Product cart mein add ho gaya 🛒',
     });
   } catch (error) {
+    console.error('Add to cart error:', error);
     res.status(500).json({
       success: false,
       message: 'Cart mein add nahi ho paaya',
@@ -171,6 +183,11 @@ const updateCartItem = async (req, res) => {
     }
 
     cart.items[itemIndex].quantity = quantity;
+    
+    // Update totals
+    cart.totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
+    cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    
     await cart.save();
 
     // Populated cart return karo
@@ -185,6 +202,7 @@ const updateCartItem = async (req, res) => {
       message: 'Cart update ho gaya ✅',
     });
   } catch (error) {
+    console.error('Update cart error:', error);
     res.status(500).json({
       success: false,
       message: 'Cart update nahi ho paaya',
@@ -216,6 +234,10 @@ const removeFromCart = async (req, res) => {
                   item.color === color)
     );
 
+    // Update totals
+    cart.totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
+    cart.totalPrice = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    
     await cart.save();
 
     const updatedCart = await Cart.findById(cart._id).populate({
@@ -229,6 +251,7 @@ const removeFromCart = async (req, res) => {
       message: 'Item cart se remove ho gaya 🗑️',
     });
   } catch (error) {
+    console.error('Remove from cart error:', error);
     res.status(500).json({
       success: false,
       message: 'Item remove nahi ho paaya',
@@ -251,6 +274,9 @@ const clearCart = async (req, res) => {
     }
 
     cart.items = [];
+    cart.totalItems = 0;
+    cart.totalPrice = 0;
+    
     await cart.save();
 
     res.status(200).json({
@@ -259,6 +285,7 @@ const clearCart = async (req, res) => {
       message: 'Cart clear ho gaya 🗑️',
     });
   } catch (error) {
+    console.error('Clear cart error:', error);
     res.status(500).json({
       success: false,
       message: 'Cart clear nahi ho paaya',

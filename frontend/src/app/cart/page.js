@@ -189,6 +189,7 @@ export default function CartPage() {
                     <Link href={`/products/${item._id}`} className="flex-shrink-0">
                       <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700">
                         {item.images?.[0]?.url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={item.images[0].url}
                             alt={item.name}

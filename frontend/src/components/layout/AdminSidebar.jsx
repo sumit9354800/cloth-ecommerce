@@ -29,8 +29,8 @@ const menuItems = [
   {
     section: 'Management',
     items: [
-      { name: 'Products', icon: FiPackage, path: '/admin/dashboard/products' },
-      { name: 'Orders', icon: FiShoppingBag, path: '/admin/dashboard/orders' },
+      { name: 'Products', icon: FiPackage, path: '/admin/products' },
+      { name: 'Orders', icon: FiShoppingBag, path: '/admin/orders' },
       { name: 'Users', icon: FiUsers, path: '/admin/dashboard/users' },
     ],
   },

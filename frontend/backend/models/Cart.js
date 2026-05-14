@@ -1,49 +1,70 @@
+// backend/models/Cart.js
 const mongoose = require('mongoose');
+
+const cartItemSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+    default: 1
+  },
+  size: {
+    type: String,
+    default: null
+  },
+  color: {
+    type: String,
+    default: null
+  },
+  price: {
+    type: Number,
+    required: true
+  }
+});
 
 const cartSchema = new mongoose.Schema({
   user: {
-    type: mongoose.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-    unique: true, // Har user ka ek hi cart hoga
+    unique: true
   },
-  items: [
-    {
-      product: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Product',
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        required: true,
-        min: [1, 'Quantity kam se kam 1 honi chahiye'],
-        default: 1,
-      },
-      size: String,
-      color: String,
-      price: {
-        type: Number,
-        required: true,
-      },
-    },
-  ],
-  totalPrice: {
-    type: Number,
-    default: 0,
-  },
+  items: [cartItemSchema],
   totalItems: {
     type: Number,
-    default: 0,
+    default: 0
   },
+  totalPrice: {
+    type: Number,
+    default: 0
+  }
 }, {
-  timestamps: true, // createdAt aur updatedAt automatic add hoga
+  timestamps: true
 });
 
-// Calculate totals before saving
+// Pre-save middleware to calculate totals
 cartSchema.pre('save', function(next) {
-  this.totalItems = this.items.reduce((total, item) => total + item.quantity, 0);
-  this.totalPrice = this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+  try {
+    // Calculate total items
+    this.totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
+    
+    // Calculate total price
+    this.totalPrice = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Pre-update middleware (for findOneAndUpdate operations)
+cartSchema.pre('findOneAndUpdate', function(next) {
+  this.options.runValidators = true;
   next();
 });
 
