@@ -68,7 +68,8 @@ const Navbar = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/products?search=${searchQuery}`);
-      setSearchQuery("");
+      setSearchQuery(searchQuery);
+      console.log("search page",searchQuery)
     }
   };
 
