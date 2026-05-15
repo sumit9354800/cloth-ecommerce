@@ -17,8 +17,8 @@ connectDB();
 
 // Middlewares (Bich mein kaam karne wale functions)
 app.use(cors({
-  origin: 'http://localhost:3000', // Frontend ka address
-  credentials: true, // Cookies allow karo
+  origin: ['http://localhost:3000', 'https://YOUR_VERCEL_URL.vercel.app'],
+  credentials: true,
 }));
 app.use(express.json()); // JSON data parse karo
 app.use(express.urlencoded({ extended: true })); // Form data parse karo
